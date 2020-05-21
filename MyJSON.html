@@ -1,0 +1,150 @@
+  <head>
+
+    <meta charset="utf-8">
+
+    <title>Our superheroes</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Faster+One" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="file_system.js"></script>
+    <script src="file_system_controler.js"></script>
+
+    </script>
+   
+  </head>
+
+<!--  <body> -->
+   <body onload="file_io_ctrl.initFileIO()">
+    
+    <h1>Hello JSON!</h1>
+    <input type="button" id="load" value="load" onclick="file_io_ctrl.loadToElement('text')">
+    <input type="button" id="save" value="save" onclick="file_io_ctrl.saveFromElement('text')">
+    <BR>
+    <textarea id="text" style="width: 400px;height: 150px">Liux  File  System  Test ......</textarea>
+    <BR>
+    
+      <header>
+
+      </header>
+
+      <section>
+
+      </section>
+    
+　　<form name="liuxForm">
+      <input name="liuxFile" type="file" id="ev">
+      <textarea name="liuxOutput" cols="80" rows="40"></textarea>
+    </form>
+
+    <a id="btn" download="Liux_JSON.txt">ダウンロード</a>
+
+    <script>
+
+    const header = document.querySelector('header');
+
+    const section = document.querySelector('section');
+
+/*    
+    if(window.File){
+      window.alert("File APIが実装されてます！");
+    }else{
+      window.alert("本ブラウザはFile APIが使えません！！！");
+    }
+*/
+
+//    var requestURL = 'https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json';
+//    var requestURL = 'http://127.0.0.1:3000/superheroes.json';
+//    var requestURL = 'superheroes.json';
+/*
+    var request = new XMLHttpRequest();
+    request.open('GET',requestURL);
+    request.responseType = 'json';
+    request.send();
+
+    request.onLoad = function(){
+      var superHeroes = request.response;
+      populateHeader(superHeroes);
+      showHeroes(superHeroes);
+    }
+ 
+*/
+
+    var liux_json = "";
+    const btn = document.getElementById('btn');
+    btn.addEventListener('click',function(){
+//      const blob = new Blob(['おはよう'],{"type":"text/plain"});
+      const blob = new Blob([liux_json],{"type":"text/plain"});
+      btn.href = window.URL.createObjectURL(blob);
+    })
+
+    var form3 = document.forms.liuxForm;
+    form3.liuxFile.addEventListener("change",function(e){
+      //alert(" file listener に入った");
+      var LiuxJSON = e.target.files[0];
+
+      var reader = new FileReader();
+      reader.readAsText(LiuxJSON);
+      reader.addEventListener("load",function(){
+        form3.liuxOutput.textContent = reader.result;
+        liux_json = reader.result;
+        console.log(JSON.parse(reader.result));
+
+        var superHeroes = JSON.parse(reader.result);
+        console.log("TEXT: " + JSON.stringify(superHeroes));
+        populateHeader(superHeroes);
+        showHeroes(superHeroes);
+
+      },false);
+
+    },false)
+
+    function populateHeader(jsonObj){
+      var myH1 = document.createElement('h1');
+      myH1.textContent = jsonObj['squadName'];
+      header.appendChild(myH1);
+
+      var myPara = document.createElement('p');
+      myPara.textContent = 'Hometown: ' + jsonObj['homeTown'] + ' // Formed: ' + jsonObj['formed'];
+      header.appendChild(myPara);
+    }
+
+    function showHeroes(jsonObj){
+      var heroes = jsonObj["members"];
+
+      for(var i = 0; i < heroes.length; i++){
+        var myArticle = document.createElement('article');
+        var myH2 = document.createElement('h2');
+        var myPara1 = document.createElement('p');
+        var myPara2 = document.createElement('p');
+        var mypara3 = document.createElement('p');
+        var myList = document.createElement('ul');
+
+        myH2.textContent = heroes[i].name;
+        myPara1.textContent = 'Secret identity: ' + heroes[i].secretIdentity;
+        myPara2.textContent = 'Age: ' + heroes[i].age;
+        mypara3.textContent = 'Superpowers; ';
+
+        var superPowers = heroes[i].powers;
+        for (var j = 0; j < superPowers.length; j++){
+          var listItem = document.createElement('li');
+          listItem.textContent = superPowers[j];
+          myList.appendChild(listItem);
+        }
+
+        myArticle.appendChild(myH2);
+        myArticle.appendChild(myPara1);
+        myArticle.appendChild(myPara2);
+        myArticle.appendChild(mypara3);
+        myArticle.appendChild(myList);
+
+        section.appendChild(myArticle);
+      }
+    }
+
+    </script>
+
+  </body>
+
+</html>
